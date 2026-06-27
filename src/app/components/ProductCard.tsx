@@ -1,6 +1,9 @@
+import { useState } from "react";
 import { ShoppingBag, Star, Leaf } from "lucide-react";
+import { toast } from "sonner";
 import { Product } from "../data/products";
 import { buildWhatsAppUrl } from "../config";
+import { saveOrder } from "../services/firestore";
 
 interface ProductCardProps {
   product: Product;
@@ -14,8 +17,39 @@ const badgeConfig = {
 };
 
 export function ProductCard({ product }: ProductCardProps) {
-  const handleOrder = () => {
-    window.open(buildWhatsAppUrl(product.name, product.price), "_blank");
+  const [isOrdering, setIsOrdering] = useState(false);
+
+  const handleOrder = async () => {
+    if (isOrdering) return;
+
+    setIsOrdering(true);
+
+    try {
+      await saveOrder({
+        productName: product.name,
+        price: product.price,
+        quantity: 1,
+        source: "product-card",
+        status: "new",
+        channel: "whatsapp",
+      });
+
+      toast.success("Commande enregistrée", {
+        description: `${product.name} a bien été ajoutée à la base de données.`,
+      });
+
+      setTimeout(() => {
+        window.open(buildWhatsAppUrl(product.name, product.price), "_blank", "noopener,noreferrer");
+      }, 200);
+    } catch (error) {
+      console.error("Failed to save order to Firebase", error);
+      toast.error("Commande non enregistrée", {
+        description: "WhatsApp va quand même s'ouvrir pour ne pas bloquer la commande.",
+      });
+      window.open(buildWhatsAppUrl(product.name, product.price), "_blank", "noopener,noreferrer");
+    } finally {
+      setIsOrdering(false);
+    }
   };
 
   const badge = product.badge ? badgeConfig[product.badge] : null;
@@ -88,10 +122,11 @@ export function ProductCard({ product }: ProductCardProps) {
           </p>
           <button
             onClick={handleOrder}
-            className="inline-flex w-full sm:w-auto items-center justify-center gap-1.5 bg-primary hover:bg-primary/90 text-primary-foreground text-sm sm:text-xs font-semibold px-4 py-2.5 sm:py-2 rounded-full transition-colors"
+            disabled={isOrdering}
+            className="inline-flex w-full sm:w-auto items-center justify-center gap-1.5 bg-primary hover:bg-primary/90 disabled:opacity-70 disabled:cursor-not-allowed text-primary-foreground text-sm sm:text-xs font-semibold px-4 py-2.5 sm:py-2 rounded-full transition-colors"
           >
             <ShoppingBag className="w-3.5 h-3.5" />
-            Commander
+            {isOrdering ? "Envoi..." : "Commander"}
           </button>
         </div>
       </div>

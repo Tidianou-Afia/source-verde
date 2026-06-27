@@ -1,6 +1,5 @@
 import { Leaf, Heart, Award, Users, Truck, Shield } from "lucide-react";
 import { Card, CardContent } from "../components/ui/card";
-import { ImageWithFallback } from "../components/figma/ImageWithFallback";
 
 export function About() {
   const values = [
@@ -80,15 +79,25 @@ export function About() {
               </div>
             </div>
 
-            <div className="relative">
-              <div className="aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl">
-                <ImageWithFallback
-                  src="https://images.unsplash.com/photo-1595414902678-862fe51c9f27?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxvcmdhbmljJTIwaGVyYnMlMjBwb3dkZXIlMjBuYXR1cmFsfGVufDF8fHx8MTc4MjQ5MDgyMXww&ixlib=rb-4.1.0&q=80&w=1080"
-                  alt="Produits naturels"
-                  className="w-full h-full object-cover"
+            <div className="relative lg:pl-6">
+              <div className="absolute -top-4 left-6 z-10 inline-flex items-center gap-2 rounded-full border border-emerald-100 bg-white/90 px-4 py-2 text-xs font-semibold text-emerald-700 shadow-lg backdrop-blur">
+                <span className="h-2 w-2 rounded-full bg-emerald-500" />
+                Découvrez Source Verde en vidéo
+              </div>
+              <div className="aspect-[16/10] lg:aspect-[16/9] rounded-3xl overflow-hidden shadow-2xl bg-black ring-1 ring-black/10">
+                <video
+                  src="/video.mp4"
+                  poster="/logo.jpg"
+                  title="Vidéo Source Verde"
+                  className="w-full h-full"
+                  autoPlay
+                  muted
+                  playsInline
+                  loop
+                  // loading="lazy"
                 />
               </div>
-              <div className="absolute -bottom-6 -right-6 w-32 h-32 bg-gradient-to-br from-emerald-400 to-green-500 rounded-full blur-3xl opacity-30"></div>
+              <div className="absolute -bottom-8 -right-8 w-40 h-40 bg-gradient-to-br from-emerald-400 to-green-500 rounded-full blur-3xl opacity-30"></div>
             </div>
           </div>
         </div>

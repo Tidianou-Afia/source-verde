@@ -18,6 +18,9 @@ import { categories, products } from "../data/products";
 import { instagramReels } from "../data/instagramReels";
 import { ProductCard } from "../components/ProductCard";
 import { buildWhatsAppUrl } from "../config";
+import { useState } from "react";
+import { toast } from "sonner";
+import { saveNewsletterSubscriber } from "../services/firestore";
 
 const featuredProducts = products.filter((p) => p.badge === "bestseller").slice(0, 8);
 
@@ -71,6 +74,33 @@ const testimonials = [
 // ];
 
 export function Home() {
+  const [newsletterEmail, setNewsletterEmail] = useState("");
+  const [isNewsletterSubmitting, setIsNewsletterSubmitting] = useState(false);
+
+  const handleNewsletterSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const email = newsletterEmail.trim().toLowerCase();
+    if (!email) return;
+
+    setIsNewsletterSubmitting(true);
+
+    try {
+      await saveNewsletterSubscriber({
+        email,
+        source: "homepage-newsletter",
+        status: "subscribed",
+      });
+      toast.success("Merci, votre inscription a bien été enregistrée.");
+      setNewsletterEmail("");
+    } catch (error) {
+      console.error("Failed to save newsletter subscriber", error);
+      toast.error("Impossible d'enregistrer l'inscription pour le moment.");
+    } finally {
+      setIsNewsletterSubmitting(false);
+    }
+  };
+
   return (
     <div className="min-h-screen">
       {/* â”€â”€â”€ HERO â”€â”€â”€ */}
@@ -460,18 +490,21 @@ export function Home() {
           </p>
           <form
             className="flex flex-col sm:flex-row gap-3"
-            onSubmit={(e) => { e.preventDefault(); }}
+            onSubmit={handleNewsletterSubmit}
           >
             <input
               type="email"
               placeholder="Votre adresse email"
+              value={newsletterEmail}
+              onChange={(e) => setNewsletterEmail(e.target.value)}
               className="flex-1 bg-background border border-border rounded-full px-5 py-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/40"
             />
             <button
               type="submit"
-              className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold px-7 py-3 rounded-full transition-colors whitespace-nowrap"
+              disabled={isNewsletterSubmitting}
+              className="bg-primary hover:bg-primary/90 disabled:opacity-70 disabled:cursor-not-allowed text-primary-foreground font-semibold px-7 py-3 rounded-full transition-colors whitespace-nowrap"
             >
-              S'inscrire
+              {isNewsletterSubmitting ? "En cours..." : "S'inscrire"}
             </button>
           </form>
           <p className="text-muted-foreground text-xs mt-4">Pas de spam. Désinscription en un clic.</p>
@@ -521,7 +554,6 @@ export function Home() {
     </div>
   );
 }
-
 
 
 

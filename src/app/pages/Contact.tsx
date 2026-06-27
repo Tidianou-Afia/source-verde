@@ -5,6 +5,8 @@ import { Input } from "../components/ui/input";
 import { Textarea } from "../components/ui/textarea";
 import { useState } from "react";
 import { WHATSAPP_NUMBER } from "../config";
+import { saveContactMessage } from "../services/firestore";
+import { toast } from "sonner";
 
 export function Contact() {
   const [formData, setFormData] = useState({
@@ -12,13 +14,34 @@ export function Contact() {
     email: "",
     message: "",
   });
+  const [isSending, setIsSending] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (isSending) return;
+
+    setIsSending(true);
+
+    try {
+      await saveContactMessage({
+        name: formData.name,
+        email: formData.email,
+        message: formData.message,
+        source: "contact-page",
+        status: "new",
+      });
+
+      toast.success("Votre message a été enregistré.");
+    } catch (error) {
+      console.error("Failed to save contact message", error);
+      toast.error("Message non enregistré, mais WhatsApp va s'ouvrir.");
+    }
+
     const message = encodeURIComponent(
       `Bonjour! Je suis ${formData.name}\nEmail: ${formData.email}\n\nMessage: ${formData.message}`
     );
     window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${message}`, "_blank");
+    setIsSending(false);
   };
 
   const handleWhatsAppClick = () => {
@@ -154,10 +177,11 @@ export function Contact() {
 
                   <Button
                     type="submit"
+                    disabled={isSending}
                     className="w-full bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 text-white py-6 text-lg"
                   >
                     <Send className="w-5 h-5 mr-2" />
-                    Envoyer via WhatsApp
+                    {isSending ? "Envoi..." : "Envoyer via WhatsApp"}
                   </Button>
 
                   <p className="text-sm text-gray-600 text-center">
