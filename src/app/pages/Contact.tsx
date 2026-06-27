@@ -4,6 +4,7 @@ import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import { Textarea } from "../components/ui/textarea";
 import { useState } from "react";
+import { WHATSAPP_NUMBER } from "../config";
 
 export function Contact() {
   const [formData, setFormData] = useState({
@@ -14,17 +15,15 @@ export function Contact() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const phoneNumber = "YOUR_WHATSAPP_NUMBER";
     const message = encodeURIComponent(
       `Bonjour! Je suis ${formData.name}\nEmail: ${formData.email}\n\nMessage: ${formData.message}`
     );
-    window.open(`https://wa.me/${phoneNumber}?text=${message}`, "_blank");
+    window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${message}`, "_blank");
   };
 
   const handleWhatsAppClick = () => {
-    const phoneNumber = "YOUR_WHATSAPP_NUMBER";
     const message = encodeURIComponent("Bonjour! J'aimerais en savoir plus sur vos produits Source Verde.");
-    window.open(`https://wa.me/${phoneNumber}?text=${message}`, "_blank");
+    window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${message}`, "_blank");
   };
 
   return (

@@ -1,9 +1,7 @@
-import { useRef } from "react";
-import { Link } from "react-router";
+﻿import { Link } from "react-router";
+import { motion } from "motion/react";
 import {
   ArrowRight,
-  ChevronLeft,
-  ChevronRight,
   Droplets,
   ExternalLink,
   Heart,
@@ -43,14 +41,14 @@ const testimonials = [
   },
   {
     name: "Amina K.",
-    city: "Lyon",
+    city: "Tambacounda",
     rating: 5,
     text: "Qualité exceptionnelle et livraison très rapide. Le beurre de karité est pur et naturel, exactement ce que je cherchais. Service client via WhatsApp très réactif.",
     product: "Beurre de Karité",
   },
   {
     name: "Sarah M.",
-    city: "Marseille",
+    city: "Dakar",
     rating: 5,
     text: "Je commande régulièrement mes huiles et mes graines de nigelle ici. La fraîcheur des produits est incomparable. Source Verde c'est vraiment du sérieux !",
     product: "Graines de Nigelle",
@@ -58,37 +56,24 @@ const testimonials = [
 ];
 
 // const healthNeeds = [
-//   { icon: "💆‍♀️", label: "Cheveux" },
-//   { icon: "🌸", label: "Peau" },
-//   { icon: "⚡", label: "Énergie" },
-//   { icon: "😴", label: "Sommeil" },
-//   { icon: "🧘", label: "Stress" },
-//   { icon: "🫁", label: "Immunité" },
-//   { icon: "🌿", label: "Détox" },
-//   { icon: "🦴", label: "Articulations" },
-//   { icon: "🍼", label: "Allaitement" },
-//   { icon: "✨", label: "Beauté" },
-//   { icon: "🔥", label: "Digestion" },
-//   { icon: "👨", label: "Barbe" },
+//   { icon: "ðŸ’†â€â™€ï¸", label: "Cheveux" },
+//   { icon: "ðŸŒ¸", label: "Peau" },
+//   { icon: "âš¡", label: "Energie" },
+//   { icon: "ðŸ˜´", label: "Sommeil" },
+//   { icon: "ðŸ§˜", label: "Stress" },
+//   { icon: "ðŸ«", label: "Immunité" },
+//   { icon: "ðŸŒ¿", label: "Détox" },
+//   { icon: "ðŸ¦´", label: "Articulations" },
+//   { icon: "ðŸ¼", label: "Allaitement" },
+//   { icon: "âœ¨", label: "Beauté" },
+//   { icon: "ðŸ”¥", label: "Digestion" },
+//   { icon: "ðŸ‘¨", label: "Barbe" },
 // ];
 
 export function Home() {
-  const instagramTrackRef = useRef<HTMLDivElement>(null);
-
-  const scrollInstagram = (direction: "left" | "right") => {
-    const track = instagramTrackRef.current;
-    if (!track) return;
-
-    const amount = Math.max(track.clientWidth * 0.8, 320);
-    track.scrollBy({
-      left: direction === "left" ? -amount : amount,
-      behavior: "smooth",
-    });
-  };
-
   return (
     <div className="min-h-screen">
-      {/* ─── HERO ─── */}
+      {/* â”€â”€â”€ HERO â”€â”€â”€ */}
       <section className="relative min-h-[92vh] flex items-center overflow-hidden bg-secondary/30">
         {/* Background botanical pattern */}
         <div
@@ -105,7 +90,7 @@ export function Home() {
             <div className="order-2 lg:order-1">
               <div className="inline-flex items-center gap-2 bg-primary/10 text-primary text-xs font-semibold px-4 py-2 rounded-full mb-8 border border-primary/20">
                 <Leaf className="w-3.5 h-3.5" />
-                100% Naturel &amp; Bio · Sélection Premium
+                100% Naturel &amp; Bio Â· Sélection Premium
               </div>
 
               <h1
@@ -133,7 +118,7 @@ export function Home() {
                   href={buildWhatsAppUrl()}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 bg-[#25D366] hover:bg-[#1ebe5d] text-white font-semibold px-7 py-3.5 rounded-full transition-all shadow-lg shadow-green-500/20"
+                  className="inline-flex w-full sm:w-auto items-center justify-center gap-2 bg-[#25D366] hover:bg-[#1ebe5d] text-white font-semibold px-5 sm:px-7 py-3 text-sm sm:text-base rounded-full transition-all shadow-lg shadow-green-500/20"
                 >
                   <svg viewBox="0 0 24 24" className="w-4 h-4 fill-white">
                     <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" />
@@ -210,7 +195,7 @@ export function Home() {
         </div>
       </section>
 
-      {/* ─── HEALTH NEEDS ─── */}
+      {/* â”€â”€â”€ HEALTH NEEDS â”€â”€â”€ */}
       {/* <section className="py-12 bg-card border-y border-border">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <p className="text-center text-xs uppercase tracking-widest text-muted-foreground font-semibold mb-6">
@@ -231,7 +216,7 @@ export function Home() {
         </div>
       </section> */}
 
-      {/* ─── NOS COLLECTIONS ─── */}
+      {/* â”€â”€â”€ NOS COLLECTIONS â”€â”€â”€ */}
       <section className="py-20 bg-background">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-14">
@@ -271,7 +256,7 @@ export function Home() {
                   </h3>
                   <p className="text-white/70 text-xs sm:text-sm line-clamp-2 mb-3">{cat.description}</p>
                   <span className="inline-flex items-center gap-1 text-xs font-semibold text-white/90 group-hover:text-primary transition-colors">
-                    Découvrir <ChevronRight className="w-3.5 h-3.5" />
+                    Découvrir <ArrowRight className="w-3.5 h-3.5" />
                   </span>
                 </div>
               </Link>
@@ -280,7 +265,7 @@ export function Home() {
         </div>
       </section>
 
-      {/* ─── MEILLEURES VENTES ─── */}
+      {/* â”€â”€â”€ MEILLEURES VENTES â”€â”€â”€ */}
       <section className="py-20 bg-secondary/30">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-end justify-between mb-12">
@@ -318,7 +303,7 @@ export function Home() {
         </div>
       </section>
 
-      {/* ─── POURQUOI NOUS CHOISIR ─── */}
+      {/* â”€â”€â”€ POURQUOI NOUS CHOISIR â”€â”€â”€ */}
       <section className="py-20 bg-background">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-14">
@@ -348,7 +333,7 @@ export function Home() {
         </div>
       </section>
 
-      {/* ─── INSTAGRAM ─── */}
+      {/* â”€â”€â”€ INSTAGRAM â”€â”€â”€ */}
       <section className="relative py-20 overflow-hidden bg-background">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center mb-10 sm:mb-12">
@@ -360,69 +345,50 @@ export function Home() {
               className="text-3xl sm:text-4xl lg:text-5xl font-semibold text-foreground"
               style={{ fontFamily: "'Playfair Display', Georgia, serif" }}
             >
-              Vous etes + de 90k a nous suivre sur Instagram
+              Vous êtes + de 90k à nous suivre sur Instagram
             </h2>
           </div>
 
-          <div className="relative">
-            <button
-              type="button"
-              onClick={() => scrollInstagram("left")}
-              className="hidden lg:flex absolute left-[-12px] top-1/2 -translate-y-1/2 z-20 w-12 h-12 items-center justify-center rounded-full bg-white/95 text-foreground shadow-lg border border-border hover:bg-white transition-colors"
-              aria-label="Faire defiler vers la gauche"
-            >
-              <ChevronLeft className="w-5 h-5" />
-            </button>
-
-            <div
-              ref={instagramTrackRef}
-              className="flex gap-4 overflow-x-auto pb-3 snap-x snap-mandatory scroll-smooth [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-            >
-              {instagramReels.map((reel) => (
-                <a
-                  key={reel.title}
-                  href={reel.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group relative flex-[0_0_82%] sm:flex-[0_0_48%] lg:flex-[0_0_19%] aspect-[4/5] rounded-3xl overflow-hidden shadow-lg snap-start bg-secondary/30 focus:outline-none focus:ring-2 focus:ring-primary/40"
-                >
-                  <img
-                    src={reel.poster}
-                    alt={reel.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                  />
-                  <div className={`absolute inset-0 bg-gradient-to-t ${reel.tone}`} />
-                  <div className="absolute top-4 right-4 w-10 h-10 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center text-white transition-transform group-hover:scale-110">
-                    <Play className="w-4 h-4 fill-white" />
-                  </div>
-                  <div className="absolute inset-x-0 bottom-0 p-4 sm:p-5 text-white">
-                    <div className="inline-flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-white/80 mb-2">
-                      <Instagram className="w-3 h-3" />
-                      Reel cliquable
-                    </div>
-                    <h3
-                      className="text-lg font-semibold leading-tight mb-2"
-                      style={{ fontFamily: "'Playfair Display', Georgia, serif" }}
-                    >
-                      {reel.title}
-                    </h3>
-                    <p className="text-sm text-white/80 leading-relaxed">{reel.caption}</p>
-                  </div>
-                </a>
-              ))}
-            </div>
-
-            <button
-              type="button"
-              onClick={() => scrollInstagram("right")}
-              className="hidden lg:flex absolute right-[-12px] top-1/2 -translate-y-1/2 z-20 w-12 h-12 items-center justify-center rounded-full bg-white/95 text-foreground shadow-lg border border-border hover:bg-white transition-colors"
-              aria-label="Faire defiler vers la droite"
-            >
-              <ChevronRight className="w-5 h-5" />
-            </button>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-6">
+            {instagramReels.map((reel, index) => (
+              <motion.a
+                key={reel.title}
+                href={reel.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.3 }}
+                transition={{ duration: 0.6, ease: "easeOut", delay: index * 0.08 }}
+                className="group relative aspect-[4/3.25] md:aspect-[4/5] rounded-[1.5rem] md:rounded-[2rem] overflow-hidden shadow-xl border border-border/60 bg-secondary/30 focus:outline-none focus:ring-2 focus:ring-primary/40"
+              >
+                <img
+                  src={reel.poster}
+                  alt={reel.title}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                />
+                <div className={`absolute inset-0 bg-gradient-to-t ${reel.tone}`} />
+                <div className="absolute top-3 left-3 inline-flex items-center gap-1.5 rounded-full bg-black/45 backdrop-blur-md px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-white/90">
+                  <Instagram className="w-3 h-3" />
+                  Reel cliquable
+                </div>
+                <div className="absolute top-3 right-3 w-9 h-9 md:w-10 md:h-10 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center text-white transition-transform group-hover:scale-110">
+                  <Play className="w-3.5 h-3.5 md:w-4 md:h-4 fill-white" />
+                </div>
+                <div className="absolute inset-x-0 bottom-0 p-4 sm:p-6 text-white">
+                  <h3
+                    className="text-sm sm:text-xl font-semibold leading-tight mb-1.5 sm:mb-2"
+                    style={{ fontFamily: "'Playfair Display', Georgia, serif" }}
+                  >
+                    {reel.title}
+                  </h3>
+                  <p className="text-[11px] sm:text-sm text-white/80 leading-relaxed">{reel.caption}</p>
+                </div>
+              </motion.a>
+            ))}
           </div>
 
-          <div className="flex justify-center mt-8">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mt-8">
             <a
               href="https://www.instagram.com/"
               target="_blank"
@@ -432,11 +398,12 @@ export function Home() {
               <ExternalLink className="w-4 h-4" />
               Visiter Instagram
             </a>
+           
           </div>
         </div>
       </section>
 
-      {/* ─── TÉMOIGNAGES ─── */}
+      {/* â”€â”€â”€ TÉMOIGNAGES â”€â”€â”€ */}
       <section className="py-20 bg-secondary/30">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-14">
@@ -469,7 +436,7 @@ export function Home() {
                   </div>
                   <div>
                     <p className="font-semibold text-foreground text-sm">{t.name}</p>
-                    <p className="text-muted-foreground text-xs">{t.city} · {t.product}</p>
+                    <p className="text-muted-foreground text-xs">{t.city} Â· {t.product}</p>
                   </div>
                 </div>
               </div>
@@ -478,15 +445,15 @@ export function Home() {
         </div>
       </section>
 
-      {/* ─── NEWSLETTER ─── */}
+      {/* â”€â”€â”€ NEWSLETTER â”€â”€â”€ */}
       <section className="py-16 bg-card border-y border-border">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-2xl text-center">
-          <span className="text-2xl block mb-4">🌿</span>
+          {/* <span className="text-2xl block mb-4">ðŸŒ¿</span> */}
           <h2
             className="text-3xl font-bold text-foreground mb-3"
             style={{ fontFamily: "'Playfair Display', Georgia, serif" }}
           >
-            Restez connectés à la nature
+            Restez connectés à  la nature
           </h2>
           <p className="text-muted-foreground text-sm mb-8">
             Inscrivez-vous pour recevoir nos conseils bien-être, recettes de tisanes et offres exclusives.
@@ -511,7 +478,7 @@ export function Home() {
         </div>
       </section>
 
-      {/* ─── WHATSAPP CTA ─── */}
+      {/* â”€â”€â”€ WHATSAPP CTA â”€â”€â”€ */}
       <section className="py-24 bg-foreground text-background relative overflow-hidden">
         <div
           className="absolute inset-0 opacity-5 pointer-events-none"
@@ -538,7 +505,7 @@ export function Home() {
             href={buildWhatsAppUrl()}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-3 bg-[#25D366] hover:bg-[#1ebe5d] text-white font-bold text-lg px-10 py-4 rounded-full transition-all shadow-2xl hover:shadow-green-500/30 hover:scale-105"
+            className="inline-flex w-full sm:w-auto items-center justify-center gap-3 bg-[#25D366] hover:bg-[#1ebe5d] text-white font-bold text-base sm:text-lg px-6 sm:px-10 py-3.5 rounded-full transition-all shadow-2xl hover:shadow-green-500/30 hover:scale-105 max-w-full sm:max-w-none"
           >
             <svg viewBox="0 0 24 24" className="w-6 h-6 fill-white">
               <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" />
@@ -547,10 +514,14 @@ export function Home() {
             Commander sur WhatsApp
           </a>
           <p className="text-background/40 text-sm mt-6">
-            Réponse garantie sous 24h · Lun–Sam 9h–20h
+            Réponse garantie sous 24h Â· Lunâ€“Sam 9hâ€“20h
           </p>
         </div>
       </section>
     </div>
   );
 }
+
+
+
+

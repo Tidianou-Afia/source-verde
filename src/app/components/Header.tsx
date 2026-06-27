@@ -1,7 +1,7 @@
 import { Link, useLocation } from "react-router";
-import { Menu, X, Search, Leaf, Phone } from "lucide-react";
+import { Menu, X, Search, Phone } from "lucide-react";
 import { useState } from "react";
-import { buildWhatsAppUrl } from "../config";
+import { buildWhatsAppUrl, LOGO_PATH } from "../config";
 
 const navLinks = [
   { path: "/", label: "Accueil" },
@@ -47,8 +47,12 @@ export function Header() {
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2.5 group flex-shrink-0">
-            <div className="flex items-center justify-center w-9 h-9 rounded-full bg-primary group-hover:bg-primary/90 transition-colors">
-              <Leaf className="w-5 h-5 text-primary-foreground" />
+            <div className="w-10 h-10 rounded-full overflow-hidden bg-primary/10 border border-primary/15 shadow-sm group-hover:shadow-md transition-all flex items-center justify-center">
+              <img
+                src={LOGO_PATH}
+                alt="Source Verde"
+                className="w-full h-full object-cover"
+              />
             </div>
             <div className="flex flex-col leading-none">
               <span
@@ -65,7 +69,7 @@ export function Header() {
 
           {/* Desktop Navigation — main links only */}
           <nav className="hidden xl:flex items-center gap-1">
-            {navLinks.slice(0, 8).map((link) => (
+            {navLinks.filter((link) => ["/", "/produits", "/a-propos", "/contact"].includes(link.path)).map((link) => (
               <Link
                 key={link.path}
                 to={link.path}
@@ -127,7 +131,7 @@ export function Header() {
         {mobileMenuOpen && (
           <nav className="xl:hidden border-t border-border py-4">
             <div className="grid grid-cols-2 gap-1">
-              {navLinks.map((link) => (
+              {navLinks.filter((link) => ["/", "/produits", "/a-propos", "/contact"].includes(link.path)).map((link) => (
                 <Link
                   key={link.path}
                   to={link.path}

@@ -1,6 +1,6 @@
 import { Link } from "react-router";
-import { Leaf, Mail, Phone, MapPin, Instagram, Facebook, Youtube } from "lucide-react";
-import { buildWhatsAppUrl } from "../config";
+import { Mail, Phone, MapPin, Instagram, Facebook, Youtube } from "lucide-react";
+import { buildWhatsAppUrl, LOGO_PATH } from "../config";
 
 const catalogLinks = [
   { path: "/produits/poudres", label: "Poudres médicinales" },
@@ -25,8 +25,12 @@ export function Footer() {
           {/* Brand */}
           <div className="lg:col-span-1">
             <Link to="/" className="flex items-center gap-2.5 mb-5">
-              <div className="flex items-center justify-center w-9 h-9 rounded-full bg-primary">
-                <Leaf className="w-5 h-5 text-white" />
+              <div className="w-10 h-10 rounded-full overflow-hidden bg-background/10 border border-background/10">
+                <img
+                  src={LOGO_PATH}
+                  alt="Source Verde"
+                  className="w-full h-full object-cover"
+                />
               </div>
               <span
                 className="text-xl font-bold tracking-wide text-background"
@@ -99,19 +103,19 @@ export function Footer() {
                 </li>
               ))}
               <li>
-                <a href="#" className="text-background/60 hover:text-primary transition-colors text-sm">
+                <Link to="/mentions-legales" className="text-background/60 hover:text-primary transition-colors text-sm">
                   Mentions légales
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="text-background/60 hover:text-primary transition-colors text-sm">
+                <Link to="/politique-confidentialite" className="text-background/60 hover:text-primary transition-colors text-sm">
                   Politique de confidentialité
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="text-background/60 hover:text-primary transition-colors text-sm">
+                <Link to="/cgv" className="text-background/60 hover:text-primary transition-colors text-sm">
                   CGV
-                </a>
+                </Link>
               </li>
             </ul>
           </div>

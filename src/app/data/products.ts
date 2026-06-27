@@ -1,3 +1,5 @@
+import { productImages, type ProductImageName } from "./productImages";
+
 export type Badge = "bio" | "nouveau" | "bestseller" | "promo";
 
 export interface Product {
@@ -22,20 +24,123 @@ export interface Category {
   count?: number;
 }
 
+type ProductImageInput = Pick<Product, "id" | "name" | "category">;
+
+const categoryThemes: Record<string, { from: string; to: string; accent: string; backdrop: string }> = {
+  poudres: { from: "#E8D3A2", to: "#B87732", accent: "#6B3F1D", backdrop: "#FFF7E8" },
+  feuilles: { from: "#B7D1A8", to: "#4D7A4A", accent: "#274B28", backdrop: "#F2F8EF" },
+  huiles: { from: "#F4D38A", to: "#C9801D", accent: "#7A4B10", backdrop: "#FFF7E4" },
+  cosmetiques: { from: "#EBC7D4", to: "#B86D86", accent: "#6F3D52", backdrop: "#FFF4F8" },
+  graines: { from: "#D8C99B", to: "#8B6F3E", accent: "#564326", backdrop: "#FBF6E8" },
+  autres: { from: "#C8D9C7", to: "#6A8C66", accent: "#3E5A3A", backdrop: "#F3F8F1" },
+};
+
+const powderImg = "./poudre.jpg";
+const leafImg = "./plante.jpg";
+const oilImg = "https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=400&h=400&fit=crop&auto=format";
+const cosmeticImg = "./cosmetique.jpg";
+const seedImg = "./graine.jpg";
+const teaImg = "./the.jpg";
+
+function hashString(value: string) {
+  let hash = 0;
+  for (let i = 0; i < value.length; i += 1) {
+    hash = (hash * 31 + value.charCodeAt(i)) >>> 0;
+  }
+  return hash;
+}
+
+function escapeXml(value: string) {
+  return value
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&apos;");
+}
+
+function formatProductLabel(name: string) {
+  return name
+    .replace(/^Poudre de /i, "")
+    .replace(/^Huile de /i, "")
+    .replace(/^Feuilles de /i, "")
+    .replace(/^Graines de /i, "")
+    .replace(/^Beurre de /i, "")
+    .replace(/^Thé /i, "")
+    .replace(/^Thé de /i, "")
+    .replace(/^Pétales de /i, "")
+    .replace(/^Boutons de /i, "")
+    .replace(/^Bâton de /i, "")
+    .replace(/^Fleur de /i, "")
+    .replace(/^Pommade de /i, "")
+    .replace(/^Graisse de /i, "")
+    .replace(/^Vitamine /i, "")
+    .trim();
+}
+
+function createProductImage({ id, name, category }: ProductImageInput) {
+  const theme = categoryThemes[category] ?? categoryThemes.autres;
+  const hash = hashString(id);
+  const label = formatProductLabel(name);
+  const shortLabel = label.length > 18 ? `${label.slice(0, 16).trim()}…` : label;
+  const rotation = hash % 360;
+  const accentRotation = (hash * 7) % 360;
+  const opacity = 0.14 + ((hash % 7) * 0.02);
+
+  const svg = `
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" role="img" aria-label="${escapeXml(name)}">
+      <defs>
+        <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="${theme.backdrop}" />
+          <stop offset="100%" stop-color="#FFFFFF" />
+        </linearGradient>
+        <linearGradient id="main" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="${theme.from}" />
+          <stop offset="100%" stop-color="${theme.to}" />
+        </linearGradient>
+        <radialGradient id="glow" cx="50%" cy="35%" r="60%">
+          <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.9" />
+          <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0" />
+        </radialGradient>
+      </defs>
+      <rect width="800" height="800" fill="url(#bg)" />
+      <circle cx="180" cy="170" r="150" fill="url(#glow)" opacity="0.9" />
+      <circle cx="650" cy="120" r="120" fill="${theme.from}" opacity="${opacity}" />
+      <circle cx="680" cy="650" r="170" fill="${theme.to}" opacity="${opacity}" />
+      <g transform="translate(400 380)">
+        <circle r="210" fill="#FFFFFF" opacity="0.72" />
+        <circle r="185" fill="url(#main)" opacity="0.16" />
+        <path d="M0 -110 C80 -110 140 -50 140 20 C140 90 80 145 0 145 C-80 145 -140 90 -140 20 C-140 -50 -80 -110 0 -110Z" fill="url(#main)" opacity="0.18" transform="rotate(${rotation})" />
+        <path d="M0 -138 C48 -100 82 -48 82 18 C82 84 48 136 0 174 C-48 136 -82 84 -82 18 C-82 -48 -48 -100 0 -138Z" fill="url(#main)" opacity="0.26" transform="rotate(${accentRotation})" />
+        <circle r="92" fill="${theme.from}" opacity="0.16" />
+        <circle r="64" fill="${theme.to}" opacity="0.2" />
+      </g>
+      <text x="80" y="580" fill="${theme.accent}" font-family="Georgia, 'Times New Roman', serif" font-size="48" font-weight="700">
+        ${escapeXml(shortLabel)}
+      </text>
+      <text x="80" y="630" fill="${theme.accent}" font-family="Arial, sans-serif" font-size="24" opacity="0.72">
+        ${escapeXml("Source Verde")}
+      </text>
+    </svg>
+  `;
+
+  return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg.replace(/\s+/g, " ").trim())}`;
+}
+
 export const categories: Category[] = [
   {
     id: "poudres",
     name: "Poudres",
     icon: "🌾",
     description: "Poudres médicinales et cosmétiques naturelles",
-    image: "https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=600&h=750&fit=crop&auto=format",
+    image: "./poudre.jpg",
   },
   {
     id: "feuilles",
     name: "Plantes & Feuilles",
     icon: "🌿",
     description: "Herbes aromatiques et plantes médicinales séchées",
-    image: "https://images.unsplash.com/photo-1466637574441-749b8f19452f?w=600&h=750&fit=crop&auto=format",
+    image: "./plante.jpg",
   },
   {
     id: "huiles",
@@ -49,32 +154,25 @@ export const categories: Category[] = [
     name: "Cosmétiques",
     icon: "✨",
     description: "Soins naturels et beurres végétaux artisanaux",
-    image: "https://images.unsplash.com/photo-1571781926291-c477ebfd024b?w=600&h=750&fit=crop&auto=format",
+    image: "./cosmetique.jpg",
   },
   {
     id: "graines",
     name: "Graines",
     icon: "🌱",
     description: "Superaliments et graines nutritives de qualité",
-    image: "https://images.unsplash.com/photo-1574258495973-f010dfbb5371?w=600&h=750&fit=crop&auto=format",
+    image: "./graine.jpg",
   },
   {
     id: "autres",
     name: "Thés & Divers",
     icon: "🍵",
     description: "Thés détox, infusions relaxantes et céréales",
-    image: "https://images.unsplash.com/photo-1544787219-7f47ccb76574?w=600&h=750&fit=crop&auto=format",
+    image: "./the.jpg",
   },
 ];
 
-const powderImg = "https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=400&h=400&fit=crop&auto=format";
-const leafImg = "https://images.unsplash.com/photo-1466637574441-749b8f19452f?w=400&h=400&fit=crop&auto=format";
-const oilImg = "https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=400&h=400&fit=crop&auto=format";
-const cosmeticImg = "https://images.unsplash.com/photo-1571781926291-c477ebfd024b?w=400&h=400&fit=crop&auto=format";
-const seedImg = "https://images.unsplash.com/photo-1574258495973-f010dfbb5371?w=400&h=400&fit=crop&auto=format";
-const teaImg = "https://images.unsplash.com/photo-1544787219-7f47ccb76574?w=400&h=400&fit=crop&auto=format";
-
-export const products: Product[] = [
+const baseProducts: Product[] = [
   // Poudres
   { id: "p1", name: "Poudre de Chébé", category: "poudres", description: "Poudre traditionnelle africaine pour fortifier et allonger les cheveux", price: 12.99, image: powderImg, badge: "bestseller", benefits: ["Renforce les cheveux", "Stimule la pousse", "Hydrate le cuir chevelu"], origin: "Tchad" },
   { id: "p2", name: "Poudre d'Amla", category: "poudres", description: "Riche en vitamine C, fortifie et fait briller les cheveux", price: 9.99, image: powderImg, badge: "bio", benefits: ["Fortifie les cheveux", "Riche en vitamine C", "Prévient les cheveux blancs"], origin: "Inde" },
@@ -156,3 +254,8 @@ export const products: Product[] = [
   { id: "a3", name: "Thé Détox", category: "autres", description: "Mélange purificateur aux herbes choisies pour drainer et nettoyer", price: 9.99, image: teaImg, badge: "bestseller", benefits: ["Détox foie", "Drainant", "Minceur"], origin: "France" },
   { id: "a4", name: "Thé Relaxant", category: "autres", description: "Mélange apaisant pour retrouver calme et sérénité en soirée", price: 9.99, image: teaImg, badge: "bestseller", benefits: ["Relaxant", "Aide au sommeil", "Anti-stress"], origin: "France" },
 ];
+
+export const products: Product[] = baseProducts.map((product) => ({
+  ...product,
+  image: productImages[product.name as ProductImageName],
+}));

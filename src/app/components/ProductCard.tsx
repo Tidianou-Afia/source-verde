@@ -82,13 +82,13 @@ export function ProductCard({ product }: ProductCardProps) {
           )}
         </div>
 
-        <div className="flex items-center justify-between mt-auto pt-2 border-t border-border/50">
-          <p className="text-xl font-bold text-primary">
-            {product.price.toFixed(2)}<span className="text-sm font-normal ml-0.5">€</span>
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mt-auto pt-2 border-t border-border/50">
+          <p className="text-lg sm:text-xl font-bold text-primary">
+            {product.price.toFixed(2)}<span className="text-xs sm:text-sm font-normal ml-0.5">€</span>
           </p>
           <button
             onClick={handleOrder}
-            className="flex items-center gap-1.5 bg-primary hover:bg-primary/90 text-primary-foreground text-xs font-semibold px-4 py-2 rounded-full transition-colors"
+            className="inline-flex w-full sm:w-auto items-center justify-center gap-1.5 bg-primary hover:bg-primary/90 text-primary-foreground text-sm sm:text-xs font-semibold px-4 py-2.5 sm:py-2 rounded-full transition-colors"
           >
             <ShoppingBag className="w-3.5 h-3.5" />
             Commander
