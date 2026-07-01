@@ -1,8 +1,9 @@
 import { Building2, FileText, Globe2, Mail, Shield, Sparkles, UserCircle2 } from "lucide-react";
 import { Card, CardContent } from "../components/ui/card";
 import { LegalPageShell } from "../components/LegalPageShell";
+import { useSiteSettings } from "../context/site-settings";
 
-const noticeItems = [
+const noticeItems = (contactEmail: string) => [
   {
     title: "Éditeur du site",
     body: [
@@ -14,7 +15,7 @@ const noticeItems = [
   {
     title: "Contact",
     body: [
-      "Email : contact@sourceverde.bio",
+      `Email : ${contactEmail}`,
       "WhatsApp : via les boutons du site",
       "Site : sourceverde.bio",
     ],
@@ -30,6 +31,8 @@ const noticeItems = [
 ];
 
 export function LegalNotice() {
+  const { settings } = useSiteSettings();
+
   return (
     <LegalPageShell
       eyebrow="Cadre légal"
@@ -47,7 +50,7 @@ export function LegalNotice() {
           <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
             {[
               { icon: Building2, title: "Entreprise", text: "Source Verde" },
-              { icon: Mail, title: "Contact direct", text: "contact@sourceverde.bio" },
+              { icon: Mail, title: "Contact direct", text: settings.contactEmail },
               { icon: Globe2, title: "Accès web", text: "Le site sert de vitrine, catalogue et point d'entrée vers la commande." },
               { icon: Shield, title: "Cadre légal", text: "Les obligations d'information sont réunies dans une seule page claire." },
               { icon: UserCircle2, title: "Responsabilité", text: "Madame Ndeye Fatou Sidibé Niang." },
@@ -66,7 +69,7 @@ export function LegalNotice() {
       </Card>
 
       <div className="grid gap-6">
-        {noticeItems.map((item) => (
+        {noticeItems(settings.contactEmail).map((item) => (
           <Card key={item.title} className="border-border shadow-sm">
             <CardContent className="p-6 sm:p-8">
               <h2 className="text-2xl font-bold text-foreground" style={{ fontFamily: "'Playfair Display', Georgia, serif" }}>

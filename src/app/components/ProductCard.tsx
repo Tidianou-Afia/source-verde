@@ -4,6 +4,7 @@ import { toast } from "sonner";
 import { Product } from "../data/products";
 import { buildWhatsAppUrl } from "../config";
 import { saveOrder } from "../services/firestore";
+import { useSiteSettings } from "../context/site-settings";
 
 interface ProductCardProps {
   product: Product;
@@ -18,6 +19,7 @@ const badgeConfig = {
 
 export function ProductCard({ product }: ProductCardProps) {
   const [isOrdering, setIsOrdering] = useState(false);
+  const { settings } = useSiteSettings();
 
   const handleOrder = async () => {
     if (isOrdering) return;
@@ -39,14 +41,14 @@ export function ProductCard({ product }: ProductCardProps) {
       });
 
       setTimeout(() => {
-        window.open(buildWhatsAppUrl(product.name, product.price), "_blank", "noopener,noreferrer");
+        window.open(buildWhatsAppUrl(product.name, product.price, settings.whatsappNumber), "_blank", "noopener,noreferrer");
       }, 200);
     } catch (error) {
       console.error("Failed to save order to Firebase", error);
       toast.error("Commande non enregistrée", {
         description: "WhatsApp va quand même s'ouvrir pour ne pas bloquer la commande.",
       });
-      window.open(buildWhatsAppUrl(product.name, product.price), "_blank", "noopener,noreferrer");
+      window.open(buildWhatsAppUrl(product.name, product.price, settings.whatsappNumber), "_blank", "noopener,noreferrer");
     } finally {
       setIsOrdering(false);
     }

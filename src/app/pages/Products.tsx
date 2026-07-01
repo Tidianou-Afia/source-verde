@@ -1,8 +1,10 @@
 import { useState, useMemo } from "react";
 import { useParams } from "react-router";
 import { Search, SlidersHorizontal, X } from "lucide-react";
-import { products, categories, type Badge } from "../data/products";
+import { products as fallbackProducts, type Badge } from "../data/products";
 import { ProductCard } from "../components/ProductCard";
+import { categories } from "../services/admin";
+import { useCatalogProducts } from "../context/catalog";
 
 type SortOption = "default" | "price-asc" | "price-desc" | "name";
 
@@ -15,6 +17,7 @@ const badgeFilters: { value: Badge; label: string }[] = [
 
 export function Products() {
   const { category } = useParams();
+  const { products } = useCatalogProducts();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState(category || "tous");
   const [selectedBadge, setSelectedBadge] = useState<Badge | null>(null);
@@ -22,7 +25,8 @@ export function Products() {
   const [showFilters, setShowFilters] = useState(false);
 
   const filteredProducts = useMemo(() => {
-    let list = [...products];
+    const source = products.length ? products : fallbackProducts;
+    let list = [...source];
 
     if (selectedCategory && selectedCategory !== "tous") {
       list = list.filter((p) => p.category === selectedCategory);

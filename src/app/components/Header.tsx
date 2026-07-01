@@ -2,6 +2,7 @@ import { Link, useLocation } from "react-router";
 import { Menu, X, Search, Phone } from "lucide-react";
 import { useState } from "react";
 import { buildWhatsAppUrl, LOGO_PATH } from "../config";
+import { useSiteSettings } from "../context/site-settings";
 
 const navLinks = [
   { path: "/", label: "Accueil" },
@@ -20,6 +21,7 @@ export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const location = useLocation();
+  const { settings } = useSiteSettings();
 
   const isActive = (path: string) =>
     path === "/"
@@ -95,7 +97,7 @@ export function Header() {
             </button>
 
             <a
-              href={buildWhatsAppUrl()}
+              href={buildWhatsAppUrl(undefined, undefined, settings.whatsappNumber)}
               target="_blank"
               rel="noopener noreferrer"
               className="hidden sm:flex items-center gap-2 bg-[#25D366] hover:bg-[#1ebe5d] text-white text-xs font-semibold px-4 py-2 rounded-full transition-colors shadow-sm"
@@ -148,7 +150,7 @@ export function Header() {
             </div>
             <div className="mt-4 pt-4 border-t border-border">
               <a
-                href={buildWhatsAppUrl()}
+                href={buildWhatsAppUrl(undefined, undefined, settings.whatsappNumber)}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center justify-center gap-2 w-full bg-[#25D366] text-white text-sm font-semibold px-4 py-3 rounded-xl"

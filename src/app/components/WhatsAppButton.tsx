@@ -1,9 +1,12 @@
 import { buildWhatsAppUrl } from "../config";
+import { useSiteSettings } from "../context/site-settings";
 
 export function WhatsAppButton() {
+  const { settings } = useSiteSettings();
+
   return (
     <a
-      href={buildWhatsAppUrl()}
+      href={buildWhatsAppUrl(undefined, undefined, settings.whatsappNumber)}
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Commander sur WhatsApp"

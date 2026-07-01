@@ -37,5 +37,10 @@ export function getFirebaseDb() {
   const firebaseApp = getFirebaseApp();
   if (!firebaseApp) return null;
 
-  return getFirestore(firebaseApp);
+  try {
+    const db = getFirestore(firebaseApp);
+    return db && typeof db === "object" ? db : null;
+  } catch {
+    return null;
+  }
 }

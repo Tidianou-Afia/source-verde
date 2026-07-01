@@ -1,7 +1,12 @@
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { getFirebaseDb, isFirebaseConfigured } from "../lib/firebase";
 
-export type OrderRecord = {
+export type TimestampedRecord = {
+  createdAt?: unknown;
+  updatedAt?: unknown;
+};
+
+export type OrderRecord = TimestampedRecord & {
   productName: string;
   price?: number;
   quantity: number;
@@ -15,13 +20,13 @@ export type OrderRecord = {
   message?: string;
 };
 
-export type NewsletterRecord = {
+export type NewsletterRecord = TimestampedRecord & {
   email: string;
   source: "homepage-newsletter";
   status: "subscribed";
 };
 
-export type ContactRecord = {
+export type ContactRecord = TimestampedRecord & {
   name: string;
   email: string;
   message: string;

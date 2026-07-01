@@ -1,6 +1,7 @@
 import { Link } from "react-router";
 import { Mail, Phone, MapPin, Instagram, Facebook, Youtube } from "lucide-react";
 import { buildWhatsAppUrl, LOGO_PATH } from "../config";
+import { useSiteSettings } from "../context/site-settings";
 
 const catalogLinks = [
   { path: "/produits/poudres", label: "Poudres médicinales" },
@@ -18,6 +19,8 @@ const infoLinks = [
 ];
 
 export function Footer() {
+  const { settings } = useSiteSettings();
+
   return (
     <footer className="bg-foreground text-background mt-20">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16">
@@ -53,7 +56,7 @@ export function Footer() {
                 <Youtube className="w-4 h-4" />
               </a>
               <a
-                href={buildWhatsAppUrl()}
+                href={buildWhatsAppUrl(undefined, undefined, settings.whatsappNumber)}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="WhatsApp"
@@ -128,7 +131,7 @@ export function Footer() {
             <ul className="space-y-3">
               <li>
                 <a
-                  href={buildWhatsAppUrl()}
+                  href={buildWhatsAppUrl(undefined, undefined, settings.whatsappNumber)}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-start gap-3 text-background/60 hover:text-[#25D366] transition-colors text-sm"
@@ -139,7 +142,7 @@ export function Footer() {
               </li>
               <li className="flex items-start gap-3 text-background/60 text-sm">
                 <Mail className="w-4 h-4 mt-0.5 flex-shrink-0" />
-                <span>contact@sourceverde.bio</span>
+                <span>{settings.contactEmail}</span>
               </li>
               <li className="flex items-start gap-3 text-background/60 text-sm">
                 <MapPin className="w-4 h-4 mt-0.5 flex-shrink-0" />
@@ -150,7 +153,7 @@ export function Footer() {
             <div className="mt-6 p-4 rounded-xl bg-background/5 border border-background/10">
               <p className="text-background/80 text-xs leading-relaxed">
                 <span className="text-primary font-semibold">Horaires WhatsApp :</span><br />
-                Lun–Sam : 9h–20h<br />
+                {settings.supportHours}<br />
                 Dimanche : 10h–18h
               </p>
             </div>

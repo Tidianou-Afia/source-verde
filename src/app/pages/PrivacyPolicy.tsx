@@ -1,8 +1,9 @@
 import { Lock, Mail, ShieldCheck, Target, TimerReset, UserCheck2, Wifi, Cookie } from "lucide-react";
 import { Card, CardContent } from "../components/ui/card";
 import { LegalPageShell } from "../components/LegalPageShell";
+import { useSiteSettings } from "../context/site-settings";
 
-const policySections = [
+const policySections = (contactEmail: string) => [
   {
     title: "1. Données collectées",
     content: [
@@ -42,7 +43,7 @@ const policySections = [
     title: "6. Vos droits",
     content: [
       "Vous disposez de droits d'accès, de rectification, d'effacement, de limitation, d'opposition et de portabilité, dans les limites prévues par la réglementation.",
-      "Pour exercer vos droits, vous pouvez nous écrire à contact@sourceverde.bio en précisant votre demande et, si nécessaire, un justificatif d'identité.",
+      `Pour exercer vos droits, vous pouvez nous écrire à ${contactEmail} en précisant votre demande et, si nécessaire, un justificatif d'identité.`,
     ],
   },
   {
@@ -62,6 +63,8 @@ const policySections = [
 ];
 
 export function PrivacyPolicy() {
+  const { settings } = useSiteSettings();
+
   return (
     <LegalPageShell
       eyebrow="Protection des données"
@@ -70,7 +73,7 @@ export function PrivacyPolicy() {
       updatedAt="Juin 2026"
       highlights={[
         { label: "Référentiel", value: "RGPD" },
-        { label: "Contact", value: "773870030" },
+        { label: "Contact", value: settings.contactEmail },
         { label: "Confidentialité", value: "Traitements transparents" },
       ]}
     >
@@ -85,7 +88,7 @@ export function PrivacyPolicy() {
               { icon: Cookie, title: "Cookies", text: "Gestion claire des traceurs et préférences du visiteur." },
               { icon: Wifi, title: "Canaux utilisés", text: "Formulaire, email et WhatsApp selon le parcours choisi." },
               { icon: ShieldCheck, title: "Droits RGPD", text: "Accès, rectification, effacement, opposition et portabilité." },
-              { icon: Mail, title: "Contact données", text: "Une adresse dédiée pour toute demande liée à la vie privée." },
+              { icon: Mail, title: "Contact données", text: settings.contactEmail },
             ].map(({ icon: Icon, title, text }) => (
               <div key={title} className="rounded-2xl border border-border bg-card p-5 shadow-sm">
                 <div className="mb-4 inline-flex h-11 w-11 items-center justify-center rounded-xl bg-primary/10 text-primary">
@@ -100,7 +103,7 @@ export function PrivacyPolicy() {
       </Card>
 
       <div className="grid gap-6">
-        {policySections.map((section) => (
+        {policySections(settings.contactEmail).map((section) => (
           <Card key={section.title} className="border-border shadow-sm">
             <CardContent className="p-6 sm:p-8">
               <h2 className="text-2xl font-bold text-foreground" style={{ fontFamily: "'Playfair Display', Georgia, serif" }}>

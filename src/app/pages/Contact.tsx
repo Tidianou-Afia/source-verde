@@ -4,11 +4,12 @@ import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import { Textarea } from "../components/ui/textarea";
 import { useState } from "react";
-import { WHATSAPP_NUMBER } from "../config";
 import { saveContactMessage } from "../services/firestore";
 import { toast } from "sonner";
+import { useSiteSettings } from "../context/site-settings";
 
 export function Contact() {
+  const { settings } = useSiteSettings();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -40,13 +41,13 @@ export function Contact() {
     const message = encodeURIComponent(
       `Bonjour! Je suis ${formData.name}\nEmail: ${formData.email}\n\nMessage: ${formData.message}`
     );
-    window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${message}`, "_blank");
+    window.open(`https://wa.me/${settings.whatsappNumber}?text=${message}`, "_blank");
     setIsSending(false);
   };
 
   const handleWhatsAppClick = () => {
     const message = encodeURIComponent("Bonjour! J'aimerais en savoir plus sur vos produits Source Verde.");
-    window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${message}`, "_blank");
+    window.open(`https://wa.me/${settings.whatsappNumber}?text=${message}`, "_blank");
   };
 
   return (
@@ -99,10 +100,10 @@ export function Contact() {
                   Envoyez-nous un email, nous vous répondrons rapidement
                 </p>
                 <a
-                  href="mailto:contact@sourceverde.bio"
+                  href={`mailto:${settings.contactEmail}`}
                   className="text-emerald-600 hover:text-emerald-700 font-medium text-sm"
                 >
-                  contact@sourceverde.bio
+                  {settings.contactEmail}
                 </a>
               </CardContent>
             </Card>

@@ -14,15 +14,15 @@ import {
   Truck,
   Zap,
 } from "lucide-react";
-import { categories, products } from "../data/products";
+import { categories, products as fallbackProducts } from "../data/products";
 import { instagramReels } from "../data/instagramReels";
 import { ProductCard } from "../components/ProductCard";
 import { buildWhatsAppUrl } from "../config";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { toast } from "sonner";
 import { saveNewsletterSubscriber } from "../services/firestore";
-
-const featuredProducts = products.filter((p) => p.badge === "bestseller").slice(0, 8);
+import { useCatalogProducts } from "../context/catalog";
+import { useSiteSettings } from "../context/site-settings";
 
 const whyUs = [
   { icon: Leaf, title: "100% Naturel", desc: "Tous nos produits proviennent de la nature, sans additifs chimiques." },
@@ -74,8 +74,14 @@ const testimonials = [
 // ];
 
 export function Home() {
+  const { products } = useCatalogProducts();
+  const { settings } = useSiteSettings();
   const [newsletterEmail, setNewsletterEmail] = useState("");
   const [isNewsletterSubmitting, setIsNewsletterSubmitting] = useState(false);
+  const featuredProducts = useMemo(() => {
+    const source = products.length ? products : fallbackProducts;
+    return source.filter((p) => p.badge === "bestseller").slice(0, 8);
+  }, [products]);
 
   const handleNewsletterSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -120,20 +126,18 @@ export function Home() {
             <div className="order-2 lg:order-1">
               <div className="inline-flex items-center gap-2 bg-primary/10 text-primary text-xs font-semibold px-4 py-2 rounded-full mb-8 border border-primary/20">
                 <Leaf className="w-3.5 h-3.5" />
-                100% Naturel &amp; Bio Â· Sélection Premium
+                100% Naturel &amp; Bio · Sélection Premium
               </div>
 
               <h1
                 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-foreground leading-[1.1] mb-6"
                 style={{ fontFamily: "'Playfair Display', Georgia, serif" }}
               >
-                Retrouvez les<br />
-                <em className="text-primary not-italic">trésors</em> de<br />
-                la nature.
+                {settings.heroTitle}
               </h1>
 
               <p className="text-lg text-muted-foreground leading-relaxed mb-10 max-w-md">
-                Découvrez notre sélection de produits naturels soigneusement choisis pour votre bien-être quotidien.
+                {settings.heroSubtitle}
               </p>
 
               <div className="flex flex-wrap gap-4">
@@ -145,7 +149,7 @@ export function Home() {
                   <ArrowRight className="w-4 h-4" />
                 </Link>
                 <a
-                  href={buildWhatsAppUrl()}
+                  href={buildWhatsAppUrl(undefined, undefined, settings.whatsappNumber)}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex w-full sm:w-auto items-center justify-center gap-2 bg-[#25D366] hover:bg-[#1ebe5d] text-white font-semibold px-5 sm:px-7 py-3 text-sm sm:text-base rounded-full transition-all shadow-lg shadow-green-500/20"
@@ -535,7 +539,7 @@ export function Home() {
             Un simple message WhatsApp suffit. Nous vous répondons rapidement et préparons votre commande avec soin.
           </p>
           <a
-            href={buildWhatsAppUrl()}
+            href={buildWhatsAppUrl(undefined, undefined, settings.whatsappNumber)}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex w-full sm:w-auto items-center justify-center gap-3 bg-[#25D366] hover:bg-[#1ebe5d] text-white font-bold text-base sm:text-lg px-6 sm:px-10 py-3.5 rounded-full transition-all shadow-2xl hover:shadow-green-500/30 hover:scale-105 max-w-full sm:max-w-none"
@@ -554,6 +558,4 @@ export function Home() {
     </div>
   );
 }
-
-
 

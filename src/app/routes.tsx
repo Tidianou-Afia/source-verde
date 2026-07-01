@@ -7,8 +7,13 @@ import { Cgv } from "./pages/Cgv";
 import { LegalNotice } from "./pages/LegalNotice";
 import { PrivacyPolicy } from "./pages/PrivacyPolicy";
 import { Layout } from "./components/Layout";
+import { Admin } from "./pages/Admin";
 
 export const router = createBrowserRouter([
+  {
+    path: "/admin",
+    Component: Admin,
+  },
   {
     path: "/",
     Component: Layout,
